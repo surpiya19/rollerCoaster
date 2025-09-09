@@ -34,6 +34,8 @@ RAW_DATA_PATH = Path("data/coaster_db.csv")
 CLEAN_DATA_PATH = Path("data/coaster_db_clean.csv")
 PLOTS_DIR = Path("plots")
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+SUBSETS_DIR = Path("subsets")
+SUBSETS_DIR.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
     format="%(asctime)s — %(levelname)s — %(message)s",
@@ -132,6 +134,31 @@ def clean_data(df: pl.DataFrame) -> pl.DataFrame:
     )
 
     return coaster
+
+
+# -------------------------
+# FILTERING FUNCTIONS
+# -------------------------
+def filter_data(df: pl.DataFrame) -> dict[str, pl.DataFrame]:
+    logging.info("Creating filtered subsets...")
+
+    subsets = {
+        "Active": df.filter(pl.col("Status") == "Operating"),
+        "Modern": df.filter(pl.col("Year_Introduced") >= 2000),
+        "Fast": df.filter(pl.col("Speed_mph") >= 70),
+        "Tall_inversions": df.filter(
+            (pl.col("Height_ft") >= 200) & (pl.col("Inversions") > 0)
+        ),
+        "Expensive": df.filter(pl.col("Cost") >= 50_000_000),
+    }
+
+    for name, subset in subsets.items():
+        logging.info(f"{name} subset → {len(subset)} rows")
+        subset_path = SUBSETS_DIR / f"{name}_subset.csv"
+        subset.write_csv(subset_path)
+        logging.info(f"Saved → {subset_path}")
+
+    return subsets
 
 
 # -------------------------
@@ -274,20 +301,29 @@ def plot_correlation_heatmap(df: pl.DataFrame):
 # MAIN PIPELINE
 # -------------------------
 def main():
+    # Load + Clean
     raw = load_data(RAW_DATA_PATH)
     clean = clean_data(raw)
 
     logging.info(f"Saving cleaned dataset → {CLEAN_DATA_PATH}")
     clean.write_csv(CLEAN_DATA_PATH)
 
+    # Summary stats (whole dataset)
     summary_stats(clean)
 
-    # Plots
+    # Filtering subsets
+    subsets = filter_data(clean)
+
+    # Run plots on the full dataset
     plot_speed_distribution(clean)
     plot_yearly_trend(clean)
     plot_height_vs_speed(clean)
     plot_cost_vs_speed(clean)
     plot_correlation_heatmap(clean)
+
+    # Running a plot on one subset for comparison
+    # (example: modern coasters only)
+    plot_speed_distribution(subsets["Modern"])
 
     logging.info("Pipeline finished successfully ✅")
 

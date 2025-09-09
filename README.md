@@ -67,6 +67,8 @@ d. **Evaluation**
 - `plots/cost_vs_speed.png` → Scatter of cost vs speed (log scale).
 - `plots/correlation_heatmap.png` → Correlation heatmap across numeric features.
 
+**For the mlmodel:**
+
 - Correlation heatmap → `plots/correlation_heatmap.png`  
 - Actual vs Predicted (all models) → `plots/predictions.png`  
 - Detailed XGBoost evaluation → `plots/xgboost_predictions.png`  

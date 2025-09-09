@@ -8,21 +8,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-run:
+  run-pipeline:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the repository
-      - name: Checkout repo
+      # 1. Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       # 2. Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.12"
+          python-version: "3.11"
 
-      # 3. Cache pip packages for faster runs
+      # 3. Cache pip
       - name: Cache pip
         uses: actions/cache@v3
         with:
@@ -37,17 +37,33 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 5. Run data cleaning & analysis
+      # 5. Check if raw CSV exists
+      - name: Verify data file
+        run: |
+          if [ ! -f "./data/coaster_db.csv" ]; then
+            echo "ERROR: data/coaster_db.csv is missing!"
+            exit 1
+          fi
+
+      # 6. Run data cleaning
       - name: Run Coaster Analysis
         run: |
           python coaster_analysis.py
 
-      # 6. Run ML pipeline
+      # 7. Check if cleaned CSV exists
+      - name: Verify cleaned CSV
+        run: |
+          if [ ! -f "./data/coaster_db_clean.csv" ]; then
+            echo "ERROR: data/coaster_db_clean.csv was not created!"
+            exit 1
+          fi
+
+      # 8. Run ML pipeline
       - name: Run Cost Prediction
         run: |
           python coaster_cost_prediction.py
 
-      # 7. Upload plots as artifacts
+      # 9. Upload plots
       - name: Upload plots
         uses: actions/upload-artifact@v3
         with:

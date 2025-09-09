@@ -65,7 +65,8 @@ jobs:
 
       # 9. Upload plots
       - name: Upload plots
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coaster-plots
           path: plots/
+

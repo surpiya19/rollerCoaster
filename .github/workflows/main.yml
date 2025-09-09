@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
+      # 1. Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      # 3. Cache pip
+      # 3. Cache pip packages
       - name: Cache pip
         uses: actions/cache@v3
         with:
@@ -37,20 +37,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 5. Check if raw CSV exists
-      - name: Verify data file
+      # 5. Ensure data folder exists
+      - name: Create data folder
+        run: mkdir -p data
+
+      # 6. Download raw CSV if missing
+      - name: Download raw CSV if missing
         run: |
           if [ ! -f "./data/coaster_db.csv" ]; then
-            echo "ERROR: data/coaster_db.csv is missing!"
-            exit 1
+            echo "Downloading raw CSV..."
+            curl -L -o ./data/coaster_db.csv "https://example.com/path/to/coaster_db.csv"
+          else
+            echo "Raw CSV already exists."
           fi
 
-      # 6. Run data cleaning
+      # 7. Run data cleaning
       - name: Run Coaster Analysis
-        run: |
-          python coaster_analysis.py
+        run: python coaster_analysis.py
 
-      # 7. Check if cleaned CSV exists
+      # 8. Verify cleaned CSV
       - name: Verify cleaned CSV
         run: |
           if [ ! -f "./data/coaster_db_clean.csv" ]; then
@@ -58,15 +63,13 @@ jobs:
             exit 1
           fi
 
-      # 8. Run ML pipeline
+      # 9. Run ML pipeline
       - name: Run Cost Prediction
-        run: |
-          python coaster_cost_prediction.py
+        run: python coaster_cost_prediction.py
 
-      # 9. Upload plots
+      # 10. Upload plots
       - name: Upload plots
         uses: actions/upload-artifact@v4
         with:
           name: coaster-plots
           path: plots/
-

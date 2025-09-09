@@ -45,7 +45,7 @@ jobs:
       # 6. Run ML pipeline
       - name: Run Cost Prediction
         run: |
-          python coaster_cost_prediction.py
+          python mlmodel.py
 
       # 7. Upload plots as artifacts
       - name: Upload plots

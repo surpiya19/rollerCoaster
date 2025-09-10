@@ -122,7 +122,6 @@ d. **Evaluation**
 
 ## 📂 Project Structure
 
-📂 Project Structure
 ```
 rollerCoaster/
 │

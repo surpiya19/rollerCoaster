@@ -123,6 +123,7 @@ d. **Evaluation**
 ## 📂 Project Structure
 
 📂 Project Structure
+```
 rollerCoaster/
 │
 ├── .github/workflows/
@@ -159,7 +160,7 @@ rollerCoaster/
 ├── requirements.txt              # Python dependencies
 ├── .gitignore                    # Git ignore rules
 └── README.md                     # Project documentation
-
+```
 ---
 
 ## ▶️ Usage

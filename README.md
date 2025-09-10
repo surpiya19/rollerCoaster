@@ -122,16 +122,43 @@ d. **Evaluation**
 
 ## 📂 Project Structure
 
+📂 Project Structure
 rollerCoaster/
-│── data/
-│ └── coaster_db.csv # Raw dataset
-│── scripts/
-│ └── coaster_analysis.py # Main analysis pipeline
-│── plots/ # Generated plots
-│── subsets/ # Filtered datasets (CSV)
-│── models/ # (optional) ML training scripts
-│── README.md # Project documentation
-
+│
+├── .github/workflows/
+│   └── main.yml                  # CI/CD workflow
+│
+├── data/
+│   ├── coaster_db.csv            # Raw dataset
+│   └── coaster_db_clean.csv      # Cleaned dataset
+│
+├── notebooks/
+│   ├── coaster_exploration.ipynb # EDA and visualization
+│   └── mlmodel.ipynb             # Model experimentation
+│
+├── plots/                        # Generated plots
+│   ├── correlation_heatmap.png
+│   ├── cost_vs_speed.png
+│   ├── height_vs_speed.png
+│   ├── predictions.png
+│   ├── speed_distribution.png
+│   ├── xgboost_predictions.png
+│   └── yearly_trend.png
+│
+├── scripts/
+│   ├── coaster_analysis.py       # Main analysis pipeline
+│   └── mlmodel.py                # ML model training script
+│
+├── subsets/                      # Filtered datasets
+│   ├── Active_subset.csv
+│   ├── Expensive_subset.csv
+│   ├── Fast_subset.csv
+│   ├── Modern_subset.csv
+│   └── Tall_inversions_subset.csv
+│
+├── requirements.txt              # Python dependencies
+├── .gitignore                    # Git ignore rules
+└── README.md                     # Project documentation
 
 ---
 

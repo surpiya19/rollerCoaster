@@ -6,3 +6,7 @@ seaborn
 plotly
 scikit-learn
 xgboost
+pytest
+pytest-cov
+flake8
+black

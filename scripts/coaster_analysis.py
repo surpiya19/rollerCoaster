@@ -5,7 +5,8 @@
 coaster_analysis.py
 -------------------
 
-Production-ready pipeline for cleaning, analyzing, and visualizing roller coaster data.
+Production-ready pipeline for cleaning, analyzing,
+and visualizing roller coaster data.
 
 Features:
 1. Data cleaning (date, cost, numeric columns, duplicates)
@@ -178,7 +179,6 @@ def plot_speed_distribution(df: pl.DataFrame):
 
     mean_speed: float = float(speed_data.mean())
     median_speed: float = float(np.median(speed_data))
-    std_speed: float = float(speed_data.std())
 
     plt.figure(figsize=(10, 6))
     plt.hist(
@@ -305,7 +305,6 @@ def main():
     # Load + Clean
     raw = load_data(RAW_DATA_PATH)
     clean = clean_data(raw)
-
     logging.info(f"Saving cleaned dataset → {CLEAN_DATA_PATH}")
     clean.write_csv(CLEAN_DATA_PATH)
 

@@ -1,25 +1,2 @@
 Coaster_Name,Location,Status,Manufacturer,Year_Introduced,latitude,longitude,Type_Main,Opening_Date,Speed_mph,Height_ft,Inversions,Gforce,Cost
-Hagrid's Magical Creatures Motorbike Adventure,Universal's Islands of Adventure,Operating,Intamin,2019,28.4298,-81.5859,Steel,2019-06-13,50.0,,0,,300000000.0
-Kanonen,Liseberg,Removed,Intamin,2005,57.6933,11.9954,Steel,2005-04-23,46.6,78.7,2,,50000000.0
-Monster (Gröna Lund),Gröna Lund,Operating,Bolliger & Mabillard,2021,59.3239,18.0961,Steel,2021-06-02,55.9,,3,4.5,450000000.0
-Jupiter (roller coaster),Kijima Kogen,Operating,Intamin,1992,33.2617,131.4281,Wood,1992-01-01,56.5,137.8,0,,2500000000.0
-Twist Coaster Robin,Yomiuriland,Removed,Sansei Technologies,2014,35.6253,139.5194,Steel,2014-03-19,38.5,62.3,2,3.9,450000000.0
-Python (Efteling),Efteling,Operating,Vekoma,1981,51.6469,5.0536,Steel,1981-04-12,46.6,95.1,4,3.5,94000000.0
-The Flying Dinosaur,Universal Studios Japan,Operating,Bolliger & Mabillard,2016,34.6634,135.4305,Steel,2016-03-18,62.0,,5,,10000000000.0
-Roller Coaster (Dam Sen Park),Dam Sen Cultural Park,Operating,Hebei Zhongye Metallurgical Equipment,1998,10.7605,106.6368,Steel,1998-01-01,43.5,78.7,3,3.8,20000000000.0
-Incredicoaster,Disney California Adventure,Operating,Intamin,2001,33.8046,-117.9218,Steel,2001-02-08,55.0,,1,,60000000.0
-Wood Coaster (Mountain Flyer),OCT East,Operating,Great Coasters International,2011,22.6145,114.2968,Wood,2011-07-19,61.2,,0,,90000000.0
-Hakugei (roller coaster),Nagashima Spa Land,Operating,Rocky Mountain Construction,1994,35.0303,136.7347,Steel,2019-03-28,66.5,180.4,3,4.0,2800000000.0
-Hollywood Dream – The Ride,Universal Studios Japan,Operating,Bolliger & Mabillard,2007,34.6666,135.4338,Steel,2007-03-09,55.9,144.4,0,,50000000.0
-Roller Coaster (Dai Nam Van Hien),Đại Nam Văn Hiến,Operating,Hebei Zhongye Metallurgical Equipment,2008,11.0433,106.6325,Steel,2008-09-11,46.6,110.2,4,4.0,25000000000.0
-Dæmonen,Tivoli Gardens,Operating,Bolliger & Mabillard,2004,55.6728,12.5703,Steel,2004-04-16,47.8,91.9,3,4.0,75000000.0
-Expedition Everest,Disney's Animal Kingdom,Operating,Vekoma,2006,,,Other,2006-04-07,50.0,,0,3.0,100000000.0
-Fønix (roller coaster),Fårup Sommerland,Under construction,Vekoma,2022,,,Steel,,59.0,,3,4.1,100000000.0
-California Screamin',Disney California Adventure,Operating,Intamin,2001,33.8046,-117.9218,Steel,2001-02-08,55.0,,1,,60000000.0
-Eejanaika (roller coaster),Fuji-Q Highland,Operating,S&S Arrow,2006,35.4884,138.7808,Steel,2006-07-19,78.3,,3,,3500000000.0
-Wildfire (Kolmården Wildlife Park),Kolmården Wildlife Park,Operating,Rocky Mountain Construction,2016,58.6653,16.4664,Wood,2016-06-28,71.5,183.7,3,4.0,110000000.0
-Manta (SeaWorld Orlando),SeaWorld Orlando,Operating,Bolliger & Mabillard,2009,28.4119,-81.4617,Steel,2009-05-22,56.0,,4,3.7,50000000.0
-Steel Dragon 2000,Nagashima Spa Land,Operating,D. H. Morgan Manufacturing,2000,35.0312,136.7301,Steel,2000-08-01,95.0,318.2,0,,52000000.0
-Balder (roller coaster),Liseberg,Operating,Intamin,2003,57.6933,11.9961,Wood,2003-04-12,55.9,118.1,0,,100000000.0
-Roller Coaster (Suoi Tien Park),Suoi Tien Amusement Park,Operating,Vekoma,2000,10.8607,106.8044,Steel,2000-01-01,43.5,98.4,0,2.0,30000000000.0
-Raging Spirits,Tokyo DisneySea,Operating,Intamin,2005,35.6277,139.8808,Steel,2005-07-21,37.3,,1,,8000000000.0
+Fast One,Park C,Operating,Maker3,2021,30.0,300.0,Steel,2021-08-08,80.0,210.0,2,4.0,100000000.0

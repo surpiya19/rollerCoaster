@@ -1,0 +1,30 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+	"name": "RollerCoaster Dev Container",
+	// Build from your custom Dockerfile
+	"build": {
+		"dockerfile": "../Dockerfile", // Path to your Dockerfile relative to this file
+		"context": ".."
+	},
+	// Forward ports to host (e.g., if you want to run a server on 8080)
+	"forwardPorts": [
+		8080
+	],
+	// Install dependencies after container creation (optional, since you do it in Dockerfile)
+	"postCreateCommand": "make install",
+	// VS Code customizations
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.black-formatter",
+				"ms-python.flake8"
+			]
+		}
+	},
+	// Run as root (matches your Dockerfile)
+	"remoteUser": "root",
+	// Workspace folder inside container
+	"workspaceFolder": "/workspaces/rollerCoaster"
+}

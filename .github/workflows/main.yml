@@ -1,71 +1,35 @@
-name: Python Data Pipeline & ML
+name: CI Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+    branches: [ "main" ]
 
 jobs:
-  run-pipeline:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      # 2. Set up Python
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
 
-      # 3. Cache pip
-      - name: Cache pip
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      # 4. Install dependencies
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Lint code with flake8
+      run: |
+        pip install flake8
+        flake8 scripts/ tests/
 
-      # 5. Check if raw CSV exists
-      - name: Verify data file
-        run: |
-          if [ ! -f "./data/coaster_db.csv" ]; then
-            echo "ERROR: data/coaster_db.csv is missing!"
-            exit 1
-          fi
-
-      # 6. Run data cleaning
-      - name: Run Coaster Analysis
-        run: |
-          python coaster_analysis.py
-
-      # 7. Check if cleaned CSV exists
-      - name: Verify cleaned CSV
-        run: |
-          if [ ! -f "./data/coaster_db_clean.csv" ]; then
-            echo "ERROR: data/coaster_db_clean.csv was not created!"
-            exit 1
-          fi
-
-      # 8. Run ML pipeline
-      - name: Run Cost Prediction
-        run: |
-          python coaster_cost_prediction.py
-
-      # 9. Upload plots
-      - name: Upload plots
-        uses: actions/upload-artifact@v3
-        with:
-          name: coaster-plots
-          path: plots/
+    - name: Run tests with coverage
+      run: |
+        pip install pytest pytest-cov
+        python -m pytest -vv --cov=scripts --cov-report=term-missing tests/

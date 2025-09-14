@@ -1,2 +1,4 @@
 .DS_Store
 .flake8
+.pytest_cache
+.coverage

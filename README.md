@@ -184,14 +184,16 @@ rollerCoaster/
 - Plots → PNGs in plots/
 
 ## 🧪 Tests:
-- All tests are written with pytest and live inside tests/.
-| Test File                        | Function                    | Purpose                                                                                                                             |
-| -------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/test_coaster_analysis.py` | `test_clean_data()`         | Ensures data cleaning correctly converts numeric columns, drops duplicates, and standardizes dates                                  |
-|                                  | `test_create_subsets()`     | Verifies that subset CSVs (`Active`, `Modern`, `Fast`, `Tall_inversions`, `Expensive`) are created with the correct filtering logic |
-|                                  | `test_generate_plots()`     | Runs the plotting functions and checks that expected `.png` files are generated in `plots/`                                         |
+All tests are written with **pytest** and live inside `tests/`.
+
+| Test File                        | Function                | Purpose                                                                                                                             |
+| -------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/test_coaster_analysis.py` | `test_clean_data()`    | Ensures data cleaning correctly converts numeric columns, drops duplicates, and standardizes dates                                  |
+|                                  | `test_create_subsets()`| Verifies that subset CSVs (`Active`, `Modern`, `Fast`, `Tall_inversions`, `Expensive`) are created with the correct filtering logic |
+|                                  | `test_generate_plots()`| Runs the plotting functions and checks that expected `.png` files are generated in `plots/`                                         |
 | `tests/test_mlmodel.py`          | `test_train_and_evaluate()` | Runs ML training pipeline on a small sample dataset, ensures models train without errors, and that metrics are returned             |
-|                                  | `test_generate_ml_plots()`  | Ensures ML-specific plots (`predictions.png`, `xgboost_predictions.png`) are created in the output folder                           |
+|                                  | `test_generate_ml_plots()` | Ensures ML-specific plots (`predictions.png`, `xgboost_predictions.png`) are created in the output folder                           |
+
 
 
 ### Running tests with coverage:

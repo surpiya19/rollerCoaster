@@ -201,7 +201,7 @@ All tests are written with **pytest** and live inside `tests/`.
 ### To run pytest with the code:
 - PYTHONPATH=$(pwd) pytest -v
 
-## Docker Setup:
+## 🐳 Docker Setup:
 
 ### Build and run in a container.
 ```
@@ -210,7 +210,7 @@ All tests are written with **pytest** and live inside `tests/`.
 ```
 ---
 
-## CI/CD:
+## 👩🏽‍💻 CI/CD:
 - This project uses GitHub Actions (.github/workflows/main.yml) to:
    - Install dependencies
    - Run linting and tests on every push/pull request

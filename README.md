@@ -1,3 +1,6 @@
+![Python](https://img.shields.io/badge/python-3.12-blue)
+![Tests](https://github.com/surpiya19/rollerCoaster/actions/workflows/main.yml/badge.svg)
+
 # 🎢 Roller Coaster Data Analysis
 This project explores a dataset of rollercoasters from around the world, including details such as their height, speed, length, manufacturer, inversions, g-forces and opening dates. It also experiments with **predictive modeling** (Linear Regression, Random Forest, XGBoost) to estimate construction cost based on ride features.
 This repository contains two complementary pipelines for exploring, cleaning, analyzing, and modeling roller coaster data.  
@@ -36,8 +39,7 @@ This repository contains two complementary pipelines for exploring, cleaning, an
 
    All plots are saved into the `plots/` folder.
 
-4. **ML Model**
-### Steps
+### ✅ ML Model Exploration (`mlmodel.py`)
 a. **Data Loading**
    - Uses `coaster_db_clean.csv`
    - Keeps only `Cost`, `Gforce`, `Speed_mph`
@@ -60,7 +62,7 @@ d. **Evaluation**
 ---
 
 ## 📊 Example Outputs
-
+##### All outputs can be found in the ***plots*** folder.
 - `plots/speed_distribution.png` → Histogram of coaster speeds with mean/median markers.
 - `plots/yearly_trend.png` → Line plot of coaster introductions over time.
 - `plots/height_vs_speed.png` → Scatter showing correlation between height and speed.
@@ -68,7 +70,6 @@ d. **Evaluation**
 - `plots/correlation_heatmap.png` → Correlation heatmap across numeric features.
 
 **For the mlmodel:**
-
 - Correlation heatmap → `plots/correlation_heatmap.png`  
 - Actual vs Predicted (all models) → `plots/predictions.png`  
 - Detailed XGBoost evaluation → `plots/xgboost_predictions.png`  
@@ -88,19 +89,11 @@ d. **Evaluation**
 
 ## 🤖 Model Comparison
 
-### Linear Regression
-- ✅ Simple, interpretable.  
-- ❌ Predictions cluster near the mean → fails to capture variance.  
-
-### Random Forest
-- ✅ Handles non-linearities better, spreads predictions more.  
-- ⚠️ Still underfits extremes.  
-
-### XGBoost
-- ✅ Best diagonal alignment among models.  
-- ✅ Captures variance better.  
-- ❌ Still underpredicts high costs.  
-- ❌ **Overall performance is very poor**.
+| Model                 | MAE (log scale) | RMSE (log scale) | R² (log scale) | Notes                                                   |
+| --------------------- | --------------- | ---------------- | -------------- | ------------------------------------------------------- |
+| **Linear Regression** | High            | High             | Near 0         | Struggles, predictions cluster near mean                |
+| **Random Forest**     | Lower than LR   | Lower than LR    | Still low      | Handles non-linearities better                          |
+| **XGBoost**           | **1.79**        | **3.56**         | **-0.04**      | Best model so far but still underpredicts extreme costs |
 
 **XGBoost Metrics (log scale):**
 - MAE = 1.79  
@@ -124,6 +117,9 @@ d. **Evaluation**
 
 ```
 rollerCoaster/
+│
+├── .devcontainer
+│   └── devcontainer.json         # Dev container setup 
 │
 ├── .github/workflows/
 │   └── main.yml                  # CI/CD workflow
@@ -149,6 +145,7 @@ rollerCoaster/
 │   ├── coaster_analysis.py       # Main analysis pipeline
 │   └── mlmodel.py                # ML model training script
 │
+│
 ├── subsets/                      # Filtered datasets
 │   ├── Active_subset.csv
 │   ├── Expensive_subset.csv
@@ -156,9 +153,20 @@ rollerCoaster/
 │   ├── Modern_subset.csv
 │   └── Tall_inversions_subset.csv
 │
-├── requirements.txt              # Python dependencies
+├── tests/
+│   ├── test_coaster_analysis.py       # Tests for coaster_analysis.py
+│   └── test_mlmodel.py                # Tests for mlmodel.py
+│   └── test_coaster_plots.py          # Tests for plot generation
+│
+├── .flake8                       # Linting fix
 ├── .gitignore                    # Git ignore rules
-└── README.md                     # Project documentation
+├── Dockerfile                    # Docker file for containerized setup
+├── Makefile                      # Local make tests  
+├── README.md                     # Project documentation
+└── requirements.txt              # Python dependencies
+
+
+
 ```
 ---
 
@@ -175,9 +183,46 @@ rollerCoaster/
 - Subsets → CSVs in subsets/
 - Plots → PNGs in plots/
 
-3. **🚀 Potential Next Steps**:
+## 🧪 Tests:
+- All tests are written with pytest and live inside tests/.
+| Test File                        | Function                    | Purpose                                                                                                                             |
+| -------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/test_coaster_analysis.py` | `test_clean_data()`         | Ensures data cleaning correctly converts numeric columns, drops duplicates, and standardizes dates                                  |
+|                                  | `test_create_subsets()`     | Verifies that subset CSVs (`Active`, `Modern`, `Fast`, `Tall_inversions`, `Expensive`) are created with the correct filtering logic |
+|                                  | `test_generate_plots()`     | Runs the plotting functions and checks that expected `.png` files are generated in `plots/`                                         |
+| `tests/test_mlmodel.py`          | `test_train_and_evaluate()` | Runs ML training pipeline on a small sample dataset, ensures models train without errors, and that metrics are returned             |
+|                                  | `test_generate_ml_plots()`  | Ensures ML-specific plots (`predictions.png`, `xgboost_predictions.png`) are created in the output folder                           |
 
-- Perform feature engineering (e.g., interaction terms, non-linear transformations).
-- Explore regularization models (Ridge, Lasso).
-- Consider domain-specific features (e.g., ride type, manufacturer grouping).
-- Evaluate tree-based ensembles with hyperparameter tuning.
+
+### Running tests with coverage:
+- pytest -vv --cov=scripts --cov-report=term-missing
+### To run pytest with the code:
+- PYTHONPATH=$(pwd) pytest -v
+
+## Docker Setup:
+
+### Build and run in a container.
+```
+   - docker build -t rollercoaster .  
+   - docker run -it --rm rollercoaster
+```
+---
+
+## CI/CD:
+- This project uses GitHub Actions (.github/workflows/main.yml) to:
+   - Install dependencies
+   - Run linting and tests on every push/pull request
+   - Report coverage in CI logs
+---
+
+## 📈 Conclusion & Key Takeaways
+
+- **Data Cleaning:** Successfully standardized coaster dataset, created meaningful subsets (Fast, Tall, Expensive, etc.)
+- **Visualization:** Identified trends like the surge in coaster construction in the 1990s–2000s
+- **Modeling:** Found that current features only weakly predict construction cost — more feature engineering (e.g., park size, country-level economic indicators) could improve performance
+#### Potential Next Steps:
+- Incorporate feature engineering
+- Tune models using cross-validation & hyperparameter search
+- Explore non-regression models (e.g., gradient boosting regressors with engineered features)
+
+---

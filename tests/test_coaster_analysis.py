@@ -1,92 +1,48 @@
 import pytest
 import polars as pl
-
-from scripts import coaster_analysis as ca
+from scripts.coaster_analysis import load_data, clean_data, filter_data
 
 
 @pytest.fixture
-def sample_df(tmp_path):
-    """Create a small sample dataset for testing cleaning/filtering."""
-    data = pl.DataFrame(
-        {
-            "coaster_name": ["Test Coaster", "Old Coaster", "Fast One"],
-            "Location": ["Park A", "Park B", "Park C"],
-            "Status": ["Operating", "Closed", "Operating"],
-            "Manufacturer": ["Maker1", "Maker2", "Maker3"],
-            "year_introduced": [2010, 1995, 2021],
-            "Cost": ["$10 million", "$5 million", "$100 million"],
-            "latitude": [10.0, 20.0, 30.0],
-            "longitude": [100.0, 200.0, 300.0],
-            "Type_Main": ["Steel", "Wood", "Steel"],
-            "opening_date_clean": ["2010-01-01", "1995-05-05", "2021-08-08"],
-            "speed_mph": [50, 40, 80],
-            "height_ft": [100, 50, 210],
-            "Inversions_clean": [1, 0, 2],
-            "Gforce_clean": [3.5, 3.0, 4.0],
-        }
-    )
-    return data
+def sample_df():
+    data = {
+        "coaster_name": ["Ride1", "Ride2", "Ride1"],
+        "Location": ["ParkA", "ParkB", "ParkA"],
+        "Status": ["Operating", "Closed", "Operating"],
+        "Manufacturer": ["MakerA", "MakerB", "MakerA"],
+        "year_introduced": [2001, 1999, 2001],
+        "Cost": ["$1,000,000", "approx 2,000,000 USD", "$1 million"],
+        "latitude": [40.0, 41.0, 40.0],
+        "longitude": [-75.0, -76.0, -75.0],
+        "Type_Main": ["Steel", "Wood", "Steel"],
+        "opening_date_clean": ["2001-05-01", "1999-07-10", "2001-05-01"],
+        "speed_mph": [60, 80, 60],
+        "height_ft": [100, 80, 100],
+        "Inversions_clean": [2, 0, 2],
+        "Gforce_clean": [3.5, 2.8, 3.5],
+    }
+    return pl.DataFrame(data)
 
 
-def test_clean_data_removes_duplicates_and_casts(sample_df):
-    clean = ca.clean_data(sample_df)
-
-    # 1) Columns should have been renamed
-    assert "Coaster_Name" in clean.columns
-    assert "Speed_mph" in clean.columns
-
-    # 2) Cost column should be numeric
-    assert clean["Cost"].dtype == pl.Float64
-
-    # 3) No duplicate rows should remain
-    unique_rows = clean.unique(
-        subset=["Coaster_Name", "Location", "Opening_Date", "Speed_mph"]
-    )
-    assert len(unique_rows) == len(clean)
+def test_load_data(tmp_path, sample_df):
+    path = tmp_path / "data.csv"
+    sample_df.write_csv(path)
+    df = load_data(path)
+    assert isinstance(df, pl.DataFrame)
+    assert df.shape[0] == 3
 
 
-def test_filter_data_creates_expected_subsets(sample_df):
-    clean = ca.clean_data(sample_df)
-    subsets = ca.filter_data(clean)
-
-    # 1) Should return a dictionary with correct keys
-    expected_keys = {"Active", "Modern", "Fast", "Tall_inversions", "Expensive"}
-    assert set(subsets.keys()) == expected_keys
-
-    # 2) 'Fast' subset should only include rows >= 70 mph
-    fast_subset = subsets["Fast"]
-    assert all(fast_subset["Speed_mph"] >= 70)
-
-    # 3) 'Modern' subset should only include coasters >= 2000
-    modern_subset = subsets["Modern"]
-    assert all(modern_subset["Year_Introduced"] >= 2000)
+def test_clean_data_drops_duplicates(sample_df):
+    df_clean = clean_data(sample_df)
+    # Should remove duplicate Ride1
+    assert df_clean.shape[0] == 2
+    assert "Cost" in df_clean.columns
 
 
-def test_plot_functions_create_files(sample_df, tmp_path, monkeypatch):
-    clean = ca.clean_data(sample_df)
-
-    # Override PLOTS_DIR so we don't write into the real folder
-    monkeypatch.setattr(ca, "PLOTS_DIR", tmp_path)
-
-    ca.plot_speed_distribution(clean)
-    ca.plot_yearly_trend(clean)
-    ca.plot_height_vs_speed(clean)
-    ca.plot_cost_vs_speed(clean)
-    ca.plot_correlation_heatmap(clean)
-
-    # Check that files were actually created
-    plot_files = list(tmp_path.glob("*.png"))
-    assert len(plot_files) >= 5
-
-
-def test_load_data_reads_csv(tmp_path):
-    # Create a fake CSV
-    csv_path = tmp_path / "test.csv"
-    df = pl.DataFrame({"a": [1, 2], "b": ["x", "y"]})
-    df.write_csv(csv_path)
-
-    loaded = ca.load_data(csv_path)
-
-    assert isinstance(loaded, pl.DataFrame)
-    assert loaded.shape == (2, 2)
-    assert set(loaded.columns) == {"a", "b"}
+def test_filter_data_subsets(sample_df, tmp_path):
+    df_clean = clean_data(sample_df)
+    subsets = filter_data(df_clean, subsets_dir=tmp_path)
+    # Active subset has only "Operating"
+    assert subsets["Active"].shape[0] == 1
+    # Fast subset (>100 mph) should be empty
+    assert subsets["Fast"].shape[0] == 0

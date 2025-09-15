@@ -1,3 +1,3 @@
 Coaster_Name,Location,Status,Manufacturer,Year_Introduced,latitude,longitude,Type_Main,Opening_Date,Speed_mph,Height_ft,Inversions,Gforce,Cost
-Test Coaster,Park A,Operating,Maker1,2010,10.0,100.0,Steel,2010-01-01,50.0,100.0,1,3.5,10000000.0
 Fast One,Park C,Operating,Maker3,2021,30.0,300.0,Steel,2021-08-08,80.0,210.0,2,4.0,100000000.0
+Test Coaster,Park A,Operating,Maker1,2010,10.0,100.0,Steel,2010-01-01,50.0,100.0,1,3.5,10000000.0

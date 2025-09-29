@@ -2,9 +2,6 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import FunctionTransformer
-from sklearn.compose import ColumnTransformer
 from sklearn.metrics import r2_score
 
 # ==============================

@@ -256,7 +256,7 @@ def plot_yearly_trend(df: pl.DataFrame, save_path: Path | None = None):
 
     yearly = (
         df.group_by("Year_Introduced")
-        .agg(pl.count().alias("Count"))
+        .agg(pl.len().alias("Count"))
         .sort("Year_Introduced")
         .drop_nulls()
     )

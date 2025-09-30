@@ -2,15 +2,17 @@
 # coding: utf-8
 
 """
-Roller Coaster Cost Prediction Script
---------------------------------------
-This script trains and evaluates ML models (Linear Regression, Random Forest,
-and XGBoost) to predict coaster construction cost based on ride features.
+Roller Coaster Cost Prediction Script (final version)
+----------------------------------------------------
+- Loads imputed dataset
+- Trains Linear Regression, Random Forest, XGBoost
+- Handles missing features via imputation pipeline
+- Saves evaluation metrics to CSV
+- Generates prediction and correlation plots
 """
 
 import logging
 from pathlib import Path
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,6 +21,7 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
@@ -26,79 +29,97 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 # --- Config ---
 PLOTS_DIR = Path("./plots")
+OUTPUTS_DIR = Path("./outputs")
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+FEATURE_COLS = ["Gforce", "Speed_mph", "Height_ft", "Inversions"]
 
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s — %(levelname)s — %(message)s",
+    level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s"
 )
 
 
-def load_data(path="./data/coaster_db_clean.csv") -> pd.DataFrame:
-    """Load and preprocess coaster dataset for modeling."""
-    logging.info("Loading data...")
+def load_data(path="./data/coaster_db_imputed.csv") -> pd.DataFrame:
+    logging.info("Loading imputed dataset...")
     df = pd.read_csv(path)
-    return df[["Cost", "Gforce", "Speed_mph"]].dropna()
+    df = df[df["Cost_clean"].notna()]  # target should always exist
+    return df
 
 
 def correlation_heatmap(df: pd.DataFrame):
-    """Plot and save correlation heatmap of features."""
     logging.info("Plotting correlation heatmap...")
     plt.figure(figsize=(6, 4))
-    corr = df.corr()
-    ax = sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f", cbar=True)
+    corr = df[FEATURE_COLS + ["Cost_clean"]].corr()
+    ax = sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f")
     plt.title("Correlation Heatmap")
-
-    # Add colorbar label
-    from matplotlib.colorbar import Colorbar
-
-    cbar: Colorbar = ax.collections[0].colorbar  # type: ignore[attr-defined]
-    cbar.set_label("Correlation Strength", rotation=270, labelpad=15)
-
     plt.tight_layout()
     plt.savefig(PLOTS_DIR / "correlation_heatmap.png")
     plt.close()
 
 
 def train_models(X_train, y_train):
-    """Train multiple regression models."""
     logging.info("Training models...")
-    models = {
+
+    pipelines = {
         "Linear Regression": Pipeline(
-            [("scaler", StandardScaler()), ("model", LinearRegression())]
+            [
+                ("imputer", SimpleImputer(strategy="median")),
+                ("scaler", StandardScaler()),
+                ("model", LinearRegression()),
+            ]
         ),
-        "Random Forest": RandomForestRegressor(
-            random_state=42, n_estimators=200, n_jobs=-1
+        "Random Forest": Pipeline(
+            [
+                ("imputer", SimpleImputer(strategy="median")),
+                (
+                    "model",
+                    RandomForestRegressor(random_state=42, n_estimators=200, n_jobs=-1),
+                ),
+            ]
         ),
-        "XGBoost": XGBRegressor(
-            random_state=42,
-            n_estimators=300,
-            learning_rate=0.1,
-            max_depth=5,
-            n_jobs=-1,
+        "XGBoost": Pipeline(
+            [
+                ("imputer", SimpleImputer(strategy="median")),
+                (
+                    "model",
+                    XGBRegressor(
+                        random_state=42,
+                        n_estimators=300,
+                        max_depth=5,
+                        learning_rate=0.1,
+                        n_jobs=-1,
+                    ),
+                ),
+            ]
         ),
     }
-    for name, model in models.items():
+
+    for name, pipe in pipelines.items():
         logging.info(f"Training {name}...")
-        model.fit(X_train, y_train)
-    return models
+        pipe.fit(X_train, y_train)
+    return pipelines
 
 
-def evaluate_models(models, X_test, y_test) -> pd.DataFrame:
-    """Evaluate trained models on test data."""
+def evaluate_models(models, X_test, y_test):
     logging.info("Evaluating models...")
     results = []
     for name, model in models.items():
         y_pred = model.predict(X_test)
-        mae = mean_absolute_error(y_test, y_pred)
-        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-        r2 = r2_score(y_test, y_pred)
-        results.append({"Model": name, "MAE": mae, "RMSE": rmse, "R2": r2})
-    return pd.DataFrame(results)
+        results.append(
+            {
+                "Model": name,
+                "MAE": mean_absolute_error(y_test, y_pred),
+                "RMSE": np.sqrt(mean_squared_error(y_test, y_pred)),
+                "R2": r2_score(y_test, y_pred),
+            }
+        )
+    df_metrics = pd.DataFrame(results)
+    df_metrics.to_csv(OUTPUTS_DIR / "model_metrics.csv", index=False)
+    logging.info(f"Saved metrics to {OUTPUTS_DIR / 'model_metrics.csv'}")
+    return df_metrics
 
 
-def plot_predictions(models, X_test, y_test, y):
-    """Scatter plot of actual vs predicted values for all models."""
+def plot_predictions(models, X_test, y_test, y_full):
     logging.info("Plotting predictions...")
     plt.style.use("seaborn-v0_8")
     plt.figure(figsize=(12, 4))
@@ -106,7 +127,12 @@ def plot_predictions(models, X_test, y_test, y):
         y_pred = model.predict(X_test)
         plt.subplot(1, 3, i)
         plt.scatter(y_test, y_pred, alpha=0.7, edgecolor="k")
-        plt.plot([y.min(), y.max()], [y.min(), y.max()], "r--", label="Perfect Fit")
+        plt.plot(
+            [y_full.min(), y_full.max()],
+            [y_full.min(), y_full.max()],
+            "r--",
+            label="Perfect Fit",
+        )
         plt.xlabel("Actual (log scale)")
         plt.ylabel("Predicted (log scale)")
         plt.title(name)
@@ -116,74 +142,22 @@ def plot_predictions(models, X_test, y_test, y):
     plt.close()
 
 
-def xgboost_detailed(models, X_test, y_test):
-    """Detailed evaluation and plot for XGBoost."""
-    logging.info("Evaluating XGBoost in detail...")
-    y_pred_log = models["XGBoost"].predict(X_test)
-
-    mae = mean_absolute_error(y_test, y_pred_log)
-    rmse = np.sqrt(mean_squared_error(y_test, y_pred_log))
-    r2 = r2_score(y_test, y_pred_log)
-
-    logging.info(f"XGBoost (log scale) — MAE={mae:.2f}, RMSE={rmse:.2f}, R²={r2:.2f}")
-
-    # Back-transform to actual scale
-    y_pred_actual = np.expm1(y_pred_log)
-    y_test_actual = np.expm1(y_test)
-
-    mae_actual = mean_absolute_error(y_test_actual, y_pred_actual)
-    rmse_actual = np.sqrt(mean_squared_error(y_test_actual, y_pred_actual))
-    r2_actual = r2_score(y_test_actual, y_pred_actual)
-
-    logging.info(
-        f"XGBoost (actual scale) — MAE={mae_actual:,.0f}, "
-        f"RMSE={rmse_actual:,.0f}, R²={r2_actual:.2f}"
-    )
-
-    # Scatter plot
-    plt.figure(figsize=(7, 7))
-    plt.style.use("seaborn-v0_8")
-    plt.scatter(y_test, y_pred_log, alpha=0.6, s=60, edgecolor="k", linewidth=0.5)
-    lims = [min(y_test.min(), y_pred_log.min()), max(y_test.max(), y_pred_log.max())]
-    plt.plot(lims, lims, "r--", lw=2, label="Perfect Prediction")
-    plt.xlabel("Actual (log scale)", fontsize=12)
-    plt.ylabel("Predicted (log scale)", fontsize=12)
-    plt.title("XGBoost: Predicted vs Actual (log scale)", fontsize=14, weight="bold")
-    plt.text(
-        0.05,
-        0.95,
-        f"MAE = {mae:.2f}\nRMSE = {rmse:.2f}\nR² = {r2:.2f}",
-        transform=plt.gca().transAxes,
-        verticalalignment="top",
-        fontsize=11,
-        bbox=dict(boxstyle="round,pad=0.3", facecolor="white", edgecolor="gray"),
-    )
-    plt.xlim(lims)
-    plt.ylim(lims)
-    plt.legend()
-    plt.grid(True, linestyle="--", alpha=0.7)
-    plt.tight_layout()
-    plt.savefig(PLOTS_DIR / "xgboost_predictions.png")
-    plt.close()
-
-
 def main():
-    df_model = load_data()
-    correlation_heatmap(df_model)
+    df = load_data()
+    correlation_heatmap(df)
 
-    X = df_model[["Gforce", "Speed_mph"]]
-    y = np.log1p(df_model["Cost"])
+    X = df[FEATURE_COLS]
+    y = np.log1p(df["Cost_clean"])
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
 
     models = train_models(X_train, y_train)
-    results_df = evaluate_models(models, X_test, y_test)
-    logging.info(f"\nModel Comparison:\n{results_df}")
+    metrics_df = evaluate_models(models, X_test, y_test)
+    logging.info(f"\nModel Comparison:\n{metrics_df}")
 
-    plot_predictions(models, X_test, y_test, y)
-    xgboost_detailed(models, X_test, y_test)
+    plot_predictions(models, X_test, y_test, y_full=y)
 
 
 if __name__ == "__main__":

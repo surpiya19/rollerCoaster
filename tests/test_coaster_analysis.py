@@ -3,6 +3,9 @@ import polars as pl
 from scripts.coaster_analysis import load_data, clean_data, filter_data
 
 
+# ---------------------------
+# Fixtures
+# ---------------------------
 @pytest.fixture
 def sample_df():
     data = {
@@ -24,6 +27,9 @@ def sample_df():
     return pl.DataFrame(data)
 
 
+# ---------------------------
+# Tests
+# ---------------------------
 def test_load_data(tmp_path, sample_df):
     path = tmp_path / "data.csv"
     sample_df.write_csv(path)
@@ -32,9 +38,9 @@ def test_load_data(tmp_path, sample_df):
     assert df.shape[0] == 3
 
 
-def test_clean_data_drops_duplicates(sample_df):
+def test_clean_data_removes_duplicates(sample_df):
     df_clean = clean_data(sample_df)
-    # Should remove duplicate Ride1
+    # Duplicate Ride1 should be removed
     assert df_clean.shape[0] == 2
     assert "Cost" in df_clean.columns
 

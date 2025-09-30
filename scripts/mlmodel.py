@@ -16,7 +16,6 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -49,8 +48,8 @@ def load_data(path="./data/coaster_db_imputed.csv") -> pd.DataFrame:
 def correlation_heatmap(df: pd.DataFrame):
     logging.info("Plotting correlation heatmap...")
     plt.figure(figsize=(6, 4))
-    corr = df[FEATURE_COLS + ["Cost_clean"]].corr()
-    ax = sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f")
+    # corr = df[FEATURE_COLS + ["Cost_clean"]].corr()
+    # ax = sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f")
     plt.title("Correlation Heatmap")
     plt.tight_layout()
     plt.savefig(PLOTS_DIR / "correlation_heatmap.png")

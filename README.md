@@ -133,20 +133,20 @@ The workflow is split across 4 main scripts, each serving a specific stage in th
 **For the mlmodel:**
 - Correlation heatmap → `plots/correlation_heatmap.png`  
 - Actual vs Predicted (all models) → `plots/predictions.png`  
-- Detailed XGBoost evaluation → `plots/xgboost_predictions.png`  
 - Before and After Imputation Metrics → `plots/before_after_imputation_comparison.png` 
 
 ---
 
 ## 🤖 Model Performance - Before and After Imputation
-| Model                           | MAE (log scale) | RMSE (log scale) | R² (log scale)   | Notes                                                                  |
-| ------------------------------- | --------------- | ---------------- | ---------------- | ---------------------------------------------------------------------- |
-| **Linear Regression (Raw)**     | High (3.74)     | High (6.00)      | Negative (-0.37) | Struggles due to missing/inconsistent cost data                        |
-| **Random Forest (Raw)**         | Moderate (3.27) | Moderate (5.90)  | Negative (-0.32) | Handles non-linearities better but still poor performance              |
-| **XGBoost (Raw)**               | Moderate (3.23) | Moderate (6.23)  | Negative (-0.47) | Performs slightly better but underpredicts extreme costs               |
-| **Linear Regression (Imputed)** | Low (0.67)      | Low (0.84)       | Positive (0.22)  | Benefits most from imputed data, predictions more stable               |
-| **Random Forest (Imputed)**     | Low (0.66)      | Low (0.92)       | Low (0.07)       | Improved accuracy after imputation, handles non-linear features well   |
-| **XGBoost (Imputed)**           | Moderate (0.92) | Moderate (1.36)  | Negative (-1.04) | Still struggles with some outliers, less stable than Linear Regression |
+| Model                           | MAE (log scale) | RMSE (log scale) | R² (log scale) | Notes                                              |
+| ------------------------------- | --------------- | ---------------- | -------------- | -------------------------------------------------- |
+| **Linear Regression (Raw)**     | 3.74            | 6.00             | -0.37          | Poor performance due to missing/inconsistent costs |
+| **Random Forest (Raw)**         | 3.27            | 5.90             | -0.32          | Slightly better, handles non-linearities           |
+| **XGBoost (Raw)**               | 3.23            | 6.23             | -0.47          | Slight improvement, still underpredicts extremes   |
+| **Linear Regression (Imputed)** | 0.67            | 0.84             | 0.22           | Stable and most improved after imputation          |
+| **Random Forest (Imputed)**     | 0.66            | 0.92             | 0.07           | Improved accuracy, good with non-linear features   |
+| **XGBoost (Imputed)**           | 0.92            | 1.36             | -1.04          | Some instability remains, underpredicts outliers   |
+
 
 ### 📉 Conclusion on model performance:
 - On the raw dataset, all models perform poorly (negative R²), indicating that missing or inconsistent cost data severely affects predictive performance.
@@ -167,48 +167,48 @@ python scripts/cost_prediction.py
 python scripts/modeling_report.py
 ```
 
+**Running tests with coverage:**
+- pytest -vv --cov=scripts --cov-report=term-missing
+**To run pytest with the code:**
+- PYTHONPATH=$(pwd) pytest -v
+
+**🐳 Docker Setup:**
+**Build and run in a container.**
+```
+docker build -t rollercoaster .  
+docker run -it --rm rollercoaster
+```
+
 ## 🧪 Tests:
 All tests are written with **pytest** and live inside `tests/`.
 
-| Test File                        | Function                | Purpose                                                                                                                             |
-| -------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/test_coaster_analysis.py` | `test_clean_data()`    | Ensures data cleaning correctly converts numeric columns, drops duplicates, and standardizes dates                                  |
-|                                  | `test_create_subsets()`| Verifies that subset CSVs (`Active`, `Modern`, `Fast`, `Tall_inversions`, `Expensive`) are created with the correct filtering logic |
-|                                  | `test_generate_plots()`| Runs the plotting functions and checks that expected `.png` files are generated in `plots/`                                         |
-| `tests/test_mlmodel.py`          | `test_train_and_evaluate()` | Runs ML training pipeline on a small sample dataset, ensures models train without errors, and that metrics are returned             |
-|                                  | `test_generate_ml_plots()` | Ensures ML-specific plots (`predictions.png`, `xgboost_predictions.png`) are created in the output folder                           |
+| Test File                        | Function                               | Purpose                                                                                                                                                                               |
+| -------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/test_coaster_analysis.py` | `test_load_data()`                     | Ensures the CSV loads correctly into a Polars DataFrame and retains all rows and columns                                                                                              |
+|                                  | `test_clean_data_removes_duplicates()` | Ensures data cleaning removes duplicate rows and retains necessary columns (`Cost`, etc.)                                                                                             |
+|                                  | `test_filter_data_subsets()`           | Verifies that filtered subset CSVs (`Active`, `Fast`, etc.) are created correctly based on conditions                                                                                 |
+|                                  | `test_coaster_analysis_plots()`        | Parameterized test for all plotting functions (`speed_distribution`, `yearly_trend`, `height_vs_speed`, `cost_vs_speed`, `correlation_heatmap`) to confirm `.png` files are generated |
+| `tests/test_mlmodel.py`          | `test_load_data()`                     | Ensures ML dataset loads correctly, with all features and target columns present                                                                                                      |
+|                                  | `test_train_and_evaluate()`            | Trains Linear Regression, Random Forest, and XGBoost on a small sample, ensures models are created and metrics (`MAE`, `RMSE`, `R2`) are returned                                     |
+|                                  | `test_mlmodel_plots()`                 | Confirms that prediction plots (`predictions.png`) are generated correctly in the output folder                                                                                       |
 
-
-
-### Running tests with coverage:
-- pytest -vv --cov=scripts --cov-report=term-missing
-### To run pytest with the code:
-- PYTHONPATH=$(pwd) pytest -v
-
-## 🐳 Docker Setup:
-
-### Build and run in a container.
-```
-   - docker build -t rollercoaster .  
-   - docker run -it --rm rollercoaster
-```
 ---
 
-## 👩🏽‍💻 CI/CD:
+#### 👩🏽‍💻 CI/CD:
 - This project uses GitHub Actions (.github/workflows/main.yml) to:
    - Install dependencies
    - Run linting and tests on every push/pull request
    - Report coverage in CI logs
 ---
 
-## 📈 Conclusion & Key Takeaways
+## Future Work
+- **Extreme Costs Modeling:** Investigate techniques to better predict outliers, such as robust regression or quantile regression.
+- **Advanced ML Models:** Experiment with ensemble or deep learning models to improve accuracy for high-variance cost data.
+- **Real-Time Updates:** Integrate new coaster data as it becomes available to keep models and analyses up-to-date.
 
-- **Data Cleaning:** Successfully standardized coaster dataset, created meaningful subsets (Fast, Tall, Expensive, etc.)
-- **Visualization:** Identified trends like the surge in coaster construction in the 1990s–2000s
-- **Modeling:** Found that current features only weakly predict construction cost — more feature engineering (e.g., park size, country-level economic indicators) could improve performance
-#### Potential Next Steps:
-- Incorporate feature engineering
-- Tune models using cross-validation & hyperparameter search
-- Explore non-regression models (e.g., gradient boosting regressors with engineered features)
+---
+
+## 🏁 Final Wrap-Up
+This project shows that cleaning and imputing missing data is crucial for accurate cost predictions. After imputation, models like Linear Regression and Random Forest can reliably estimate roller coaster construction costs using physical features. While extreme costs remain challenging, the pipeline provides a solid foundation for further modeling, analysis, and visualization.
 
 ---

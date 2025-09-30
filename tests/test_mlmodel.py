@@ -1,8 +1,8 @@
 import pytest
 import pandas as pd
 import numpy as np
-import scripts.mlmodel as ml
-from scripts.mlmodel import train_models, evaluate_models, plot_predictions
+import rollerCoaster.scripts.cost_prediction as ml
+from rollerCoaster.scripts.cost_prediction import train_models, evaluate_models, plot_predictions
 
 
 # ---------------------------

@@ -1,115 +1,12 @@
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![Tests](https://github.com/surpiya19/rollerCoaster/actions/workflows/main.yml/badge.svg)
 
-# 🎢 Roller Coaster Data Analysis
-This project explores a dataset of rollercoasters from around the world, including details such as their height, speed, length, manufacturer, inversions, g-forces and opening dates. It also experiments with **predictive modeling** (Linear Regression, Random Forest, XGBoost) to estimate construction cost based on ride features.
-This repository contains two complementary pipelines for exploring, cleaning, analyzing, and modeling roller coaster data.  
+# 🎢 Roller Coaster Cost Prediction
+Roller coasters are some of the most ambitious engineering projects in the world, and their construction costs can range anywhere from a few million dollars to well over $100 million.
 
-- **Data Exploration & Cleaning** → [`coaster_analysis.py`](./scripts/coaster_analysis.py)  
-- **ML Cost Prediction** → [`mlmodel.py`](./scripts/mlmodel.py)  
-- **Detailed Explanation** → Available in Jupyter Notebooks (`coaster_exploration.ipynb`,`mlmodel.ipynb`) for step-by-step insights and visualizations. 
+This project explores a simple question: **can we predict how much a roller coaster costs to build using its physical features and metadata?**
 
----
-
-## ⚙️ Features
-
-### ✅ Data Pipeline (`coaster_analysis.py`)
-1. **Data Cleaning**
-   - Parses and standardizes dates.
-   - Converts numeric columns (`Speed`, `Height`, `Cost`).
-   - Cleans cost strings into consistent numerical values.
-   - Drops duplicates.
-
-2. **Filtering and Grouping**
-   Creates meaningful subsets of the data:
-   - **Active** → Coasters still operating.
-   - **Modern** → Year introduced ≥ 2000.
-   - **Fast** → Speed ≥ 70 mph.
-   - **Tall_inversions** → Height ≥ 200 ft and at least 1 inversion.
-   - **Expensive** → Cost ≥ $50M.
-
-   Each subset is saved into the `subsets/` folder.
-
-3. **Analysis & Visualizations**
-   - Speed distribution histogram.
-   - Yearly trend of coaster introductions.
-   - Height vs. Speed scatter (with regression line).
-   - Cost vs. Speed scatter (log scale).
-   - Correlation heatmap.
-
-   All plots are saved into the `plots/` folder.
-
-### ✅ ML Model Exploration (`mlmodel.py`)
-a. **Data Loading**
-   - Uses `coaster_db_clean.csv`
-   - Keeps only `Cost`, `Gforce`, `Speed_mph`
-   - Removes missing values
-
-b. **Feature Engineering**
-   - Target variable: `Cost` transformed via `log1p` for stability
-
-c. **Models Trained**
-   - Linear Regression (with scaling pipeline)
-   - Random Forest Regressor
-   - XGBoost Regressor
-
-d. **Evaluation**
-   - Metrics:  
-     - MAE (Mean Absolute Error)  
-     - RMSE (Root Mean Squared Error)  
-     - R² (Coefficient of Determination)
-
----
-
-## 📊 Example Outputs
-##### All outputs can be found in the ***plots*** folder.
-- `plots/speed_distribution.png` → Histogram of coaster speeds with mean/median markers.
-- `plots/yearly_trend.png` → Line plot of coaster introductions over time.
-- `plots/height_vs_speed.png` → Scatter showing correlation between height and speed.
-- `plots/cost_vs_speed.png` → Scatter of cost vs speed (log scale).
-- `plots/correlation_heatmap.png` → Correlation heatmap across numeric features.
-
-**For the mlmodel:**
-- Correlation heatmap → `plots/correlation_heatmap.png`  
-- Actual vs Predicted (all models) → `plots/predictions.png`  
-- Detailed XGBoost evaluation → `plots/xgboost_predictions.png`  
-
----
-
-## 🔍 Heatmap Analysis
-
-**Correlation Matrix Highlights:**
-- **Speed vs Gforce** → `0.46` (moderate positive correlation).
-- **Cost vs Speed** → `-0.11` (very weak negative correlation).
-- **Cost vs Gforce** → `-0.14` (very weak negative correlation).
-
-👉 Implication: **Cost is not linearly related to ride features** → Linear models will struggle.
-
----
-
-## 🤖 Model Comparison
-
-| Model                 | MAE (log scale) | RMSE (log scale) | R² (log scale) | Notes                                                   |
-| --------------------- | --------------- | ---------------- | -------------- | ------------------------------------------------------- |
-| **Linear Regression** | High            | High             | Near 0         | Struggles, predictions cluster near mean                |
-| **Random Forest**     | Lower than LR   | Lower than LR    | Still low      | Handles non-linearities better                          |
-| **XGBoost**           | **1.79**        | **3.56**         | **-0.04**      | Best model so far but still underpredicts extreme costs |
-
-**XGBoost Metrics (log scale):**
-- MAE = 1.79  
-- RMSE = 3.56  
-- R² = -0.04  
-
-**XGBoost Metrics (actual cost scale):**
-- MAE = 1.52B  
-- RMSE = 6.27B  
-- R² = -0.06  
-
-### 📉 Conclusion on XGBoost
-- Negative R² values → performs worse than predicting the mean.
-- Huge MAE/RMSE → errors are unacceptably large.
-- Scatter plots confirm predictions are scattered far from the diagonal.
-- Model is **not fit for purpose** without major feature engineering or alternative modeling.
+I started with exploratory data analysis for this data and saw how the factors like height, speed, inversions, year introduced, and manufacturer relate to construction cost, uncovering historical trends and industry differences. The work for this can be found here: ![EDA](https://github.com/surpiya19/rollerCoaster/blob/main/notebooks/coaster_exploration.ipynb)
 
 ---
 
@@ -126,32 +23,44 @@ rollerCoaster/
 │
 ├── data/
 │   ├── coaster_db.csv            # Raw dataset
-│   └── coaster_db_clean.csv      # Cleaned dataset
+│   ├── coaster_db_clean.csv      # Cleaned dataset -- without imputation
+│   └── coaster_db_imputed.csv    # Cleaned dataset -- with imputations
 │
 ├── notebooks/
-│   ├── coaster_exploration.ipynb # EDA and visualization
-│   └── mlmodel.ipynb             # Model experimentation
+│   └── coaster_exploration.ipynb     # EDA and visualization
+│   
+├── outputs/
+│   ├── model_comparison.csv
+│   └── model_metrics.csv    
 │
-├── plots/                        # Generated plots
+├── plots/
+│   ├── before_after_imputation_comparison.png
 │   ├── correlation_heatmap.png
 │   ├── cost_vs_speed.png
+│   ├── model_comparison.png
+│   ├── model_speed_distributions.png
 │   ├── height_vs_speed.png
 │   ├── predictions.png
 │   ├── speed_distribution.png
-│   ├── xgboost_predictions.png
 │   └── yearly_trend.png
 │
 ├── scripts/
 │   ├── coaster_analysis.py       # Main analysis pipeline
-│   └── mlmodel.py                # ML model training script
+│   ├── impute_costs.py           # Cost imputation pipeline
+│   ├── modelling_report.py       # Metrics comparison before and after imputation
+│   └── mlmodel.py                # ML models training script
 │
+├── refactoring/
+│   ├── before.png                  # Code snippet example before refactoring
+│   └── after.png                   # Code snippet example after refactoring
+│   ├── changing_file_names.png     # Refactoring using pylance
 │
 ├── subsets/                      # Filtered datasets
-│   ├── Active_subset.csv
-│   ├── Expensive_subset.csv
-│   ├── Fast_subset.csv
-│   ├── Modern_subset.csv
-│   └── Tall_inversions_subset.csv
+│   ├── Active.csv
+│   ├── Expensive.csv
+│   ├── Fast.csv
+│   ├── Modern.csv
+│   └── Tall_inversions.csv
 │
 ├── tests/
 │   ├── test_coaster_analysis.py       # Tests for coaster_analysis.py
@@ -164,24 +73,99 @@ rollerCoaster/
 ├── Makefile                      # Local make tests  
 ├── README.md                     # Project documentation
 └── requirements.txt              # Python dependencies
-
-
-
 ```
+
+---
+
+## Data Pipeline
+This repo provides a production-ready pipeline for cleaning, analyzing, imputing, and modeling roller coaster construction cost data.
+The workflow is split across 4 main scripts, each serving a specific stage in the pipeline:
+
+1. `coaster_analysis.py`: Data cleaning, filtering, exploratory analysis & visualizations.
+2. `impute_costs.py`: Imputation of missing construction costs using a tuned Random Forest model.
+3. `cost_prediction.py`: Model training (Linear Regression, Random Forest, XGBoost) on the imputed dataset, evaluation, and prediction plots.
+4. `modeling_report.py`: Comparative study of model performance before vs after cost imputation, including feature importance analysis.
+
+#### coaster_analysis.py:
+- Cleans raw coaster_db.csv
+- Saves coaster_db_clean.csv
+- Generates summary stats & plots:
+   - Speed distribution
+   - Yearly trends of coaster introductions
+   - Height vs speed scatter/regression
+   - Cost vs speed scatter (log scale)
+   - Correlation heatmap
+- Creates filtered subsets (Active, Modern, Fast, etc.)
+
+#### impute_costs.py
+- Trains a Random Forest Regressor with GridSearchCV on available cost data.
+- Uses engineered features (height², speed×height, inversions, park age, etc.).
+- Imputes missing or invalid Cost values.
+- Saves:
+   - `coaster_db_imputed.csv` → dataset with Cost_clean and Cost_imputed flag
+   - `models/rf_imputer.joblib` → fitted model
+
+#### cost_prediction.py
+- Trains and evaluates Linear Regression, Random Forest, and XGBoost on the imputed dataset.
+- Saves:
+   - outputs/model_metrics.csv → metrics (MAE, RMSE, R²)
+   - plots/predictions.png → actual vs predicted plots
+
+#### modeling_report.py
+- Loads both raw (coaster_db_clean.csv) and imputed (coaster_db_imputed.csv) datasets.
+- Trains the same 3 models on each.
+- Compares performance:
+   - `plots/before_after_imputation_comparison.png` → bar plot of metrics
+- Extracts feature importance from Random Forest:
+   - `plots/feature_importance.png`
+
+---
+
+## Visualization Outputs
+##### All outputs can be found in the ***plots*** folder.
+- `plots/speed_distribution.png` → Histogram of coaster speeds with mean/median markers.
+- `plots/yearly_trend.png` → Line plot of coaster introductions over time.
+- `plots/height_vs_speed.png` → Scatter showing correlation between height and speed.
+- `plots/cost_vs_speed.png` → Scatter of cost vs speed (log scale).
+- `plots/correlation_heatmap.png` → Correlation heatmap across numeric features.
+-  `plots/feature_importance.png` → What affects the cost variable the most?
+
+**For the mlmodel:**
+- Correlation heatmap → `plots/correlation_heatmap.png`  
+- Actual vs Predicted (all models) → `plots/predictions.png`  
+- Detailed XGBoost evaluation → `plots/xgboost_predictions.png`  
+- Before and After Imputation Metrics → `plots/before_after_imputation_comparison.png` 
+
+---
+
+## 🤖 Model Performance - Before and After Imputation
+| Model                           | MAE (log scale) | RMSE (log scale) | R² (log scale)   | Notes                                                                  |
+| ------------------------------- | --------------- | ---------------- | ---------------- | ---------------------------------------------------------------------- |
+| **Linear Regression (Raw)**     | High (3.74)     | High (6.00)      | Negative (-0.37) | Struggles due to missing/inconsistent cost data                        |
+| **Random Forest (Raw)**         | Moderate (3.27) | Moderate (5.90)  | Negative (-0.32) | Handles non-linearities better but still poor performance              |
+| **XGBoost (Raw)**               | Moderate (3.23) | Moderate (6.23)  | Negative (-0.47) | Performs slightly better but underpredicts extreme costs               |
+| **Linear Regression (Imputed)** | Low (0.67)      | Low (0.84)       | Positive (0.22)  | Benefits most from imputed data, predictions more stable               |
+| **Random Forest (Imputed)**     | Low (0.66)      | Low (0.92)       | Low (0.07)       | Improved accuracy after imputation, handles non-linear features well   |
+| **XGBoost (Imputed)**           | Moderate (0.92) | Moderate (1.36)  | Negative (-1.04) | Still struggles with some outliers, less stable than Linear Regression |
+
+### 📉 Conclusion on model performance:
+- On the raw dataset, all models perform poorly (negative R²), indicating that missing or inconsistent cost data severely affects predictive performance.
+- After imputation, the models’ MAE and RMSE drastically decrease, showing more accurate cost predictions.
+- Linear Regression shows the best overall improvement with a positive R² (0.22), suggesting it benefits most from the imputed data.
+- Random Forest and XGBoost still have moderate performance on the imputed dataset, highlighting the complexity and variance in coaster cost data.
+- Imputation significantly stabilizes predictions, demonstrating the importance of cleaning and filling missing cost values before modeling.
+
 ---
 
 ## ▶️ Usage
 
-1. **Run the pipeline**:
-   ```bash
-   python scripts/coaster_analysis.py
-   python scripts/mlmodel.py
-   ```
-2. **Outputs**:
-
-- Clean dataset → data/coaster_db_clean.csv
-- Subsets → CSVs in subsets/
-- Plots → PNGs in plots/
+**Run the pipeline**:
+```bash
+python scripts/coaster_analysis.py
+python scripts/impute_costs.py
+python scripts/cost_prediction.py
+python scripts/modeling_report.py
+```
 
 ## 🧪 Tests:
 All tests are written with **pytest** and live inside `tests/`.

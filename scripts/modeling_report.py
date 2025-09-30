@@ -12,6 +12,7 @@ import logging
 from pathlib import Path
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -172,6 +173,27 @@ def plot_before_after_comparison(raw_metrics, imputed_metrics):
     plt.close()
 
 
+def plot_feature_importance(model, feature_names, save_path=None):
+    importances = model.feature_importances_
+    indices = np.argsort(importances)[::-1]  # sort descending
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(range(len(importances)), importances[indices], align="center")
+    plt.xticks(
+        range(len(importances)),
+        [feature_names[i] for i in indices],
+        rotation=45,
+        ha="right",
+    )
+    plt.ylabel("Importance")
+    plt.title("Feature Importance (Random Forest)")
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path, dpi=300)
+    plt.show()
+
+
 def main():
     # --- Raw dataset ---
     raw_df = load_raw_data()
@@ -202,6 +224,13 @@ def main():
     # --- Plot comparison ---
     logging.info("Plotting before vs after imputation comparison...")
     plot_before_after_comparison(raw_metrics, imputed_metrics)
+
+    # --- Feature importance (Random Forest only) ---
+    rf_model = imp_models["Random Forest"].named_steps["model"]
+    feature_names = FEATURE_COLS
+    plot_feature_importance(
+        rf_model, feature_names, save_path=PLOTS_DIR / "feature_importance.png"
+    )
 
 
 if __name__ == "__main__":

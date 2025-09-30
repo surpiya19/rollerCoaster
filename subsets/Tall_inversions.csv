@@ -1,0 +1,60 @@
+Coaster_Name,Location,Status,Manufacturer,Year_Introduced,latitude,longitude,Type_Main,Opening_Date,Speed_mph,Height_ft,Inversions,Gforce,Cost
+Thunderbolt (Dreamworld),Dreamworld,Removed,Sanoyas Hishino Meisho,1982,-27.8651,153.3165,Steel,1982-04-01,54.1,101.7,2,,3300000.0
+Wildfire (Kolmården Wildlife Park),Kolmården Wildlife Park,Operating,Rocky Mountain Construction,2016,58.6653,16.4664,Wood,2016-06-28,71.5,183.7,3,4.0,110000000.0
+Escape of Novgorod,Hansa-Park,Operating,Gerstlauer,2009,54.0744,10.7814,Steel,2009-04-09,62.1,131.2,1,4.3,
+Flying Aces (roller coaster),Ferrari World Abu Dhabi,Operating,Intamin,2016,,,Steel,2016-02-24,74.6,206.7,1,5.0,
+Roller Coaster (Dai Nam Van Hien),Đại Nam Văn Hiến,Operating,Hebei Zhongye Metallurgical Equipment,2008,11.0433,106.6325,Steel,2008-09-11,46.6,110.2,4,4.0,25000000000.0
+Baron 1898,Efteling,Operating,Bolliger & Mabillard,2015,51.6482,5.0508,Steel,2015-07-01,55.9,98.4,2,,18000000.0
+Hyperion (roller coaster),Energylandia,Operating,Intamin,2018,,,Steel,2018-07-14,88.2,252.6,1,4.8,
+Lost Gravity (roller coaster),Walibi Holland,Operating,Mack Rides,2016,52.4424,5.7663,Steel,2016-03-24,54.1,105.0,2,4.3,
+BuzzSaw (roller coaster),Dreamworld,Removed,Maurer AG,2011,-27.8623,153.3149,Steel,2011-09-17,65.2,151.6,2,5.0,7000000.0
+Kanonen,Liseberg,Removed,Intamin,2005,57.6933,11.9954,Steel,2005-04-23,46.6,78.7,2,,50000000.0
+Vild-Svinet,BonBon-Land,Operating,Gerstlauer,2003,55.2611,11.8634,Steel,2003-05-16,45.0,72.2,1,,
+Super Manège,La Ronde,Removed,Vekoma,1981,45.5238,-73.5325,Steel,1981-01-01,39.8,75.5,2,,
+Dynamite (Freizeitpark Plohn),Freizeitpark Plohn,,Mack Rides,2019,,,Steel,2019-05-18,62.1,144.4,3,,
+The Swarm (roller coaster),Thorpe Park,Operating,Bolliger & Mabillard,2012,51.4056,-0.5154,Steel,2012-03-15,59.0,126.6,5,4.5,
+Hakugei (roller coaster),Nagashima Spa Land,Operating,Rocky Mountain Construction,1994,35.0303,136.7347,Steel,2019-03-28,66.5,180.4,3,4.0,2800000000.0
+MP Xpress,Movie Park Germany,Operating,Vekoma,2001,51.6246,6.9733,Steel,2001-04-06,49.7,109.3,5,,
+Formuła (Energylandia),Energylandia,Operating,Vekoma,2016,,,Steel,2016-06-25,49.2,81.0,3,3.8,
+Do-Dodonpa,Fuji-Q Highland,Closed,S&S – Sansei Technologies,2001,35.4877,138.7823,Steel,2001-12-21,111.8,160.8,1,,
+Typhoon (Bobbejaanland),Bobbejaanland,Operating,Gerstlauer,2004,51.1997,4.9055,Steel,2004-04-10,49.7,84.3,4,5.0,5000000.0
+Abyss (roller coaster),Adventure World,Operating,Gerstlauer,2013,-32.0955,115.817,Steel,2013-11-01,52.8,98.4,3,4.5,12000000.0
+Sea Viper (roller coaster),Sea World,Removed,Arrow Dynamics,1982,-27.9569,153.4265,Steel,1982-09-17,43.5,91.9,3,,
+Pyrenees (roller coaster),Parque Espana-Shima Spain Village,Operating,Bolliger & Mabillard,1997,34.3598,136.845,Steel,1997-01-01,62.1,147.6,6,,
+Star Trek: Operation Enterprise,Movie Park Germany,Operating,Mack Rides,2017,51.6223,6.9729,Steel,2017-06-14,55.9,131.2,3,,
+Dæmonen,Tivoli Gardens,Operating,Bolliger & Mabillard,2004,55.6728,12.5703,Steel,2004-04-16,47.8,91.9,3,4.0,75000000.0
+Helix (roller coaster),Liseberg,Operating,Mack Rides,2014,57.6953,11.9908,Steel,2014-04-26,62.1,134.5,7,4.3,
+Flight Deck (Canada's Wonderland),Canada's Wonderland,Operating,Vekoma,1995,43.8412,-79.539,Steel,1995-01-01,49.7,109.3,5,,
+Mindbender (Galaxyland),Galaxyland,closed for maintenance as of july 30 no reopening date known,Anton Schwarzkopf,1985,53.5236,-113.6203,Steel,1985-12-20,60.0,145.0,3,5.2,6000000.0
+Lech Coaster,Legendia,Operating,Vekoma,2017,,,Steel,2017-07-01,59.0,131.2,3,,12000000.0
+Timber Drop,Fraispertuis City,Operating,S&S – Sansei Technologies,2011,48.3242,6.7295,Steel,2011-07-12,41.0,96.0,2,,3000000.0
+Krake,Heide Park,Operating,Bolliger & Mabillard,2011,53.0247,9.879,Steel,2011-04-16,64.0,134.5,1,,12000000.0
+Python (Efteling),Efteling,Operating,Vekoma,1981,51.6469,5.0536,Steel,1981-04-12,46.6,95.1,4,3.5,94000000.0
+Arkham Asylum – Shock Therapy,Warner Bros. Movie World,SBNO December 2019,Vekoma,1995,-27.9083,153.3119,Steel,1995-12-26,54.7,109.3,5,4.0,16000000.0
+Eurofighter (Zoosafari Fasanolandia),Zoosafari Fasanolandia,Operating,Gerstlauer,2011,40.8303,17.3398,Steel,2011-08-06,43.5,75.5,2,,2187000.0
+Diving Coaster,Happy Valley Shanghai,Operating,Bolliger & Mabillard,2009,31.0979,121.209,Steel,2009-08-16,68.4,213.3,1,4.0,
+The Oath of Kärnan,Hansa-Park,Operating,Gerstlauer,2015,54.0769,10.78,Steel,2015-07-01,78.9,239.5,1,5.0,2.0
+Dragon Fyre,Canada's Wonderland,Operating,Arrow Dynamics,1981,43.8445,-79.5407,Steel,1981-01-01,49.7,78.1,4,,
+Looping Star (Clacton Pier),Clacton Pier,Operating,Pinfari,2021,51.7864,-1.155,Steel,2021-10-23,,36.1,1,,
+Yukon Striker,Canada's Wonderland,Operating,Bolliger & Mabillard,2019,43.8402,-79.543,Steel,2019-05-03,80.8,223.1,4,,
+Goudurix,Parc Astérix,Operating,Vekoma,1989,49.1314,2.5714,Steel,1989-01-01,55.9,118.1,7,3.9,
+Dragon Khan,PortAventura Park,Operating,Bolliger & Mabillard,1995,41.0875,1.1608,Steel,1995-05-02,65.0,148.0,8,4.0,
+Falcon (Duinrell),Duinrell,Operating,Gerstlauer,2009,52.1477,4.3792,Steel,2009-05-14,43.5,72.2,3,4.5,
+Freestyle (roller coaster),Other,,TOGO,1985,,,Steel,,51.0,87.9,1,,
+Condor (roller coaster),Walibi Holland,Operating,Vekoma,1994,52.4404,5.7615,Steel,1994-05-01,49.7,101.7,5,4.5,
+Roller Coaster (Dam Sen Park),Dam Sen Cultural Park,Operating,Hebei Zhongye Metallurgical Equipment,1998,10.7605,106.6368,Steel,1998-01-01,43.5,78.7,3,3.8,20000000000.0
+Boomerang (roller coaster),Other,In Production,Vekoma,1984,,,Other,,47.0,116.5,6,,
+Galactica (roller coaster),Alton Towers,Operating,Bolliger & Mabillard,2002,52.9859,-1.8821,Steel,2002-03-16,46.6,65.6,2,3.5,12000000.0
+Green Lantern Coaster,Warner Bros. Movie World,Operating,S&S – Sansei Technologies,2011,-27.9073,153.3136,Steel,2011-12-23,41.0,108.3,2,3.5,
+Takabisha,Fuji-Q Highland,Operating,Gerstlauer,2011,35.4853,138.78,Steel,2011-07-16,62.1,141.1,7,,
+Fury (roller coaster),Bobbejaanland,Operating,Gerstlauer,2019,51.1993,4.909,Steel,2019-06-24,66.2,141.1,2,,
+The Gold Coaster,Other,,Arrow Dynamics,1995,,,Steel,,52.8,131.2,2,3.0,
+Zadra (roller coaster),Energylandia,Operating,Rocky Mountain Construction,2019,50.0019,19.4031,Other,2019-08-22,75.2,206.0,3,4.0,
+Time Warp (roller coaster),Canada's Wonderland,Operating,Zamperla,2004,43.8408,-79.5396,Steel,2004-05-02,25.7,50.2,2,,
+Huracan (Belantis),Belantis,Operating,Gerstlauer,2010,51.2531,12.3125,Steel,2010-06-26,52.8,105.0,5,4.3,5000000.0
+The Monster (Adventureland),Adventureland (Iowa),Operating,Gerstlauer,2016,41.6518,-93.5014,Steel,2016-06-04,65.2,133.2,5,,9000000.0
+Twist Coaster Robin,Yomiuriland,Removed,Sansei Technologies,2014,35.6253,139.5194,Steel,2014-03-19,38.5,62.3,2,3.9,450000000.0
+Flug der Dämonen,Heide Park Resort,Operating,Bolliger & Mabillard,2014,53.0262,9.8796,Steel,2014-03-29,62.1,131.2,5,4.0,15000000.0
+Nemesis (roller coaster),Alton Towers,Operating,Bolliger & Mabillard,1994,52.9869,-1.8828,Steel,1994-03-19,50.3,42.7,4,3.5,10000000.0
+Karacho,Erlebnispark Tripsdrill,Operating,Gerstlauer,2013,49.0377,9.0544,Steel,2013-07-10,55.9,98.4,4,,7000000.0
+Nemesis Inferno,Thorpe Park,Operating,Bolliger & Mabillard,2003,51.4035,-0.5164,Steel,2003-04-05,49.7,95.1,4,5.0,8000000.0

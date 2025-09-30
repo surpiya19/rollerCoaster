@@ -169,6 +169,7 @@ python scripts/modeling_report.py
 
 **Running tests with coverage:**
 - pytest -vv --cov=scripts --cov-report=term-missing
+
 **To run pytest with the code:**
 - PYTHONPATH=$(pwd) pytest -v
 
@@ -184,11 +185,11 @@ All tests are written with **pytest** and live inside `tests/`.
 
 | Test File                        | Function                               | Purpose                                                                                                                                                                               |
 | -------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/test_coaster_analysis.py` | `test_load_data()`                     | Ensures the CSV loads correctly into a Polars DataFrame and retains all rows and columns                                                                                              |
+| **`tests/test_coaster_analysis.py`** | `test_load_data()`                     | Ensures the CSV loads correctly into a Polars DataFrame and retains all rows and columns                                                                                              |
 |                                  | `test_clean_data_removes_duplicates()` | Ensures data cleaning removes duplicate rows and retains necessary columns (`Cost`, etc.)                                                                                             |
 |                                  | `test_filter_data_subsets()`           | Verifies that filtered subset CSVs (`Active`, `Fast`, etc.) are created correctly based on conditions                                                                                 |
 |                                  | `test_coaster_analysis_plots()`        | Parameterized test for all plotting functions (`speed_distribution`, `yearly_trend`, `height_vs_speed`, `cost_vs_speed`, `correlation_heatmap`) to confirm `.png` files are generated |
-| `tests/test_mlmodel.py`          | `test_load_data()`                     | Ensures ML dataset loads correctly, with all features and target columns present                                                                                                      |
+| **`tests/test_mlmodel.py`**          | `test_load_data()`                     | Ensures ML dataset loads correctly, with all features and target columns present                                                                                                      |
 |                                  | `test_train_and_evaluate()`            | Trains Linear Regression, Random Forest, and XGBoost on a small sample, ensures models are created and metrics (`MAE`, `RMSE`, `R2`) are returned                                     |
 |                                  | `test_mlmodel_plots()`                 | Confirms that prediction plots (`predictions.png`) are generated correctly in the output folder                                                                                       |
 
